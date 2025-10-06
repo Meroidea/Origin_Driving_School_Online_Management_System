@@ -2,19 +2,11 @@
 
 A comprehensive database-driven website for managing driving school operations.
 
-**Created for DWIN309 Final Assessment at Kent Institute Australia**
-
 ---
 
 ## 📋 Project Overview
 
 The Origin Driving School Management System is a full-featured web application designed to streamline the daily operations of a driving school. It provides complete functionality for managing students, instructors, lessons, courses, invoices, payments, vehicles, and communications.
-
-### Group Members
-- **[Member 1 Name]** (Student ID: XXXXX) - Implemented: Database Schema, User Authentication, Student Management
-- **[Member 2 Name]** (Student ID: XXXXX) - Implemented: Instructor Management, Scheduling System, Lesson Tracking
-- **[Member 3 Name]** (Student ID: XXXXX) - Implemented: Invoice Management, Payment Processing, Reporting
-- **[Member 4 Name]** (Student ID: XXXXX) - Implemented: UI/UX Design, Vehicle Management, Communications
 
 ---
 
@@ -32,6 +24,10 @@ The Origin Driving School Management System is a full-featured web application d
 - **Line Height**: 1.6
 
 ---
+Login Credentials:
+Admin: admin@origindrivingschool.com.au / pw is 'password'
+Instructor: david.smith@origindrivingschool.com.au / pw is 'password'
+Student: olivia.taylor@email.com / pw is 'password'
 
 ## 🛠️ Technology Stack
 
@@ -41,6 +37,7 @@ The Origin Driving School Management System is a full-featured web application d
 - **Server**: Apache (XAMPP)
 - **Icons**: Font Awesome 6.4.0
 - **Architecture**: MVC (Model-View-Controller)
+<img width="669" height="940" alt="Screenshot 2025-10-06 at 23 01 38" src="https://github.com/user-attachments/assets/b3d96be7-c9d6-456e-ad43-6a143e7d245b" />
 
 ---
 
@@ -173,7 +170,7 @@ htdocs/
 #### 4. Create Database
 1. Open phpMyAdmin: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 2. Click "Import" tab
-3. Choose the `database_schema.sql` file
+3. Choose the `origin_driving_school_database.sql` file
 4. Click "Go" to import
 
 The database `origin_driving_school` will be
