@@ -26,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = sanitize($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $rememberMe = isset($_POST['remember_me']);
-    
-    // Validate inputs
-    if (empty($email) || empty($password)) {
+
+    // Verify CSRF token to prevent cross-site request forgery
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        $error = 'Invalid or expired session. Please try again.';
+    } elseif (empty($email) || empty($password)) {
         $error = 'Please enter both email and password';
     } else {
         $userModel = new User();

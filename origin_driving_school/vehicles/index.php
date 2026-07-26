@@ -25,11 +25,8 @@ $branchFilter = $_GET['branch'] ?? '';
 $transmissionFilter = $_GET['transmission'] ?? '';
 $availabilityFilter = $_GET['availability'] ?? '';
 
-// Build query
-$searchQuery = '';
-if (!empty($searchTerm)) {
-    $searchQuery = "AND (v.registration_number LIKE '%$searchTerm%' OR v.make LIKE '%$searchTerm%' OR v.model LIKE '%$searchTerm%')";
-}
+// Build query using parameterized statements to prevent SQL injection
+$params = [];
 
 $sql = "SELECT v.*, b.branch_name,
         COUNT(DISTINCT l.lesson_id) as total_lessons,
@@ -38,23 +35,34 @@ $sql = "SELECT v.*, b.branch_name,
         FROM vehicles v
         INNER JOIN branches b ON v.branch_id = b.branch_id
         LEFT JOIN lessons l ON v.vehicle_id = l.vehicle_id
-        WHERE 1=1 $searchQuery";
+        WHERE 1=1";
+
+if (!empty($searchTerm)) {
+    $sql .= " AND (v.registration_number LIKE ? OR v.make LIKE ? OR v.model LIKE ?)";
+    $like = "%{$searchTerm}%";
+    $params[] = $like;
+    $params[] = $like;
+    $params[] = $like;
+}
 
 if (!empty($branchFilter)) {
-    $sql .= " AND v.branch_id = " . intval($branchFilter);
+    $sql .= " AND v.branch_id = ?";
+    $params[] = (int)$branchFilter;
 }
 
 if (!empty($transmissionFilter)) {
-    $sql .= " AND v.transmission = '" . $studentModel->db->escape($transmissionFilter) . "'";
+    $sql .= " AND v.transmission = ?";
+    $params[] = $transmissionFilter;
 }
 
 if ($availabilityFilter !== '') {
-    $sql .= " AND v.is_available = " . intval($availabilityFilter);
+    $sql .= " AND v.is_available = ?";
+    $params[] = (int)$availabilityFilter;
 }
 
 $sql .= " GROUP BY v.vehicle_id ORDER BY v.registration_number ASC";
 
-$vehicles = $studentModel->customQuery($sql);
+$vehicles = $studentModel->customQuery($sql, $params);
 
 // Get statistics
 $totalVehicles = count($vehicles);

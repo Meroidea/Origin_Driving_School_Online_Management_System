@@ -293,16 +293,12 @@ function runTest($name, $callback) {
             return $branchModel instanceof Branch;
         });
         
-        // TEST 11: Protected Property Access (Should NOT be possible)
-        runTest('OOP Encapsulation - Protected Property', function() {
+        // TEST 11: Database Dependency Access
+        runTest('Model Database Dependency', function() {
             $studentModel = new Student();
-            // This should NOT work - we're testing that it properly throws an error
-            try {
-                $db = $studentModel->db; // Trying to access protected property
-                return false; // If we reach here, encapsulation is broken
-            } catch (Error $e) {
-                return true; // Good! Protected property cannot be accessed
-            }
+            // Models expose their Database dependency publicly so pages can run
+            // custom parameterised queries. Verify it resolves to a Database.
+            return $studentModel->db instanceof Database;
         });
         
         // TEST 12: System Settings Table

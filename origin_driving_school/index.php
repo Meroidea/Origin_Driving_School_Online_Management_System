@@ -316,9 +316,9 @@ $pageTitle = 'Welcome to Origin Driving School';
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Origin Driving School Management System</p>
+                <p>&copy; <?php echo date('Y'); ?> Origin Driving School Management System</p>
                 <p>Created for DWIN309 Final Assessment at Kent Institute Australia</p>
-                <p>Group Members: [Member 1 - ID: XXXXX], [Member 2 - ID: XXXXX], [Member 3 - ID: XXXXX], [Member 4 - ID: XXXXX]</p>
+                <p>Group Members: Sujan Darji (K231673), Anthony Allan Regalado (K231715)</p>
             </div>
         </div>
     </footer>
