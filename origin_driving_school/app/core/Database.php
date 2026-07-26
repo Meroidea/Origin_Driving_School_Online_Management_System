@@ -194,8 +194,27 @@ class Database {
     }
     
     /**
+     * Escape a value for safe inclusion in a SQL string literal
+     *
+     * Note: Prepared statements (see select/insert/update/delete) are the
+     * preferred and safest approach. This helper exists for the few legacy
+     * query builders that concatenate filter values into single-quoted
+     * literals. It returns the escaped value WITHOUT surrounding quotes, so
+     * callers must supply their own quotes, e.g. "... = '" . $db->escape($v) . "'".
+     *
+     * @param mixed $value Value to escape
+     * @return string Escaped value (no surrounding quotes)
+     */
+    public function escape($value) {
+        // PDO::quote adds surrounding single quotes; strip them because the
+        // legacy call sites wrap the value in quotes themselves.
+        $quoted = $this->connection->quote((string)$value);
+        return substr($quoted, 1, -1);
+    }
+
+    /**
      * Begin transaction
-     * 
+     *
      * @return bool Success status
      */
     public function beginTransaction() {

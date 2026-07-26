@@ -76,7 +76,7 @@ $userRole = getCurrentUserRole();
         <li>
             <a href="<?php echo APP_URL; ?>/vehicles/index.php" class="<?php echo strpos($currentPage, 'vehicles') !== false ? 'active' : ''; ?>">
                 <i class="fas fa-car"></i>
-                <span>Vechiles</span>
+                <span>Vehicles</span>
             </a>
         </li>
         

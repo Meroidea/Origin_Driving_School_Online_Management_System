@@ -11,10 +11,8 @@ A comprehensive database-driven website for managing driving school operations.
 The Origin Driving School Management System is a full-featured web application designed to streamline the daily operations of a driving school. It provides complete functionality for managing students, instructors, lessons, courses, invoices, payments, vehicles, and communications.
 
 ### Group Members
-- **[Member 1 Name]** (Student ID: XXXXX) - Implemented: Database Schema, User Authentication, Student Management
-- **[Member 2 Name]** (Student ID: XXXXX) - Implemented: Instructor Management, Scheduling System, Lesson Tracking
-- **[Member 3 Name]** (Student ID: XXXXX) - Implemented: Invoice Management, Payment Processing, Reporting
-- **[Member 4 Name]** (Student ID: XXXXX) - Implemented: UI/UX Design, Vehicle Management, Communications
+- **Sujan Darji** (Student ID: K231673) - Database schema, user authentication, student management, invoicing
+- **Anthony Allan Regalado** (Student ID: K231715) - Instructor & lesson scheduling, UI/UX, vehicle management, communications
 
 ---
 
@@ -132,7 +130,7 @@ origin_driving_school/
 ├── login.php                       # Login page
 ├── logout.php                      # Logout handler
 ├── dashboard.php                   # Main dashboard
-├── database_schema.sql             # Database schema
+├── origin_driving_school_database.sql  # Database schema + seed data
 └── README.md                       # This file
 ```
 
@@ -173,7 +171,45 @@ htdocs/
 #### 4. Create Database
 1. Open phpMyAdmin: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 2. Click "Import" tab
-3. Choose the `database_schema.sql` file
+3. Choose the `origin_driving_school_database.sql` file
 4. Click "Go" to import
 
-The database `origin_driving_school` will be
+The database `origin_driving_school` will be created and seeded with sample
+branches, users, courses, and related records.
+
+#### 5. Configure the Application
+Review `config/config.php` and, if needed, update the database credentials to
+match your environment (the XAMPP defaults are user `root` with an empty
+password). Update `APP_URL` if you serve the app from a different path.
+
+#### 6. Launch
+Open [http://localhost/origin_driving_school/](http://localhost/origin_driving_school/)
+in your browser.
+
+---
+
+## 🔐 Default Login Credentials
+
+The seed data provides one account per role. **These are demo credentials —
+change or remove them before any production use.**
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@origindrivingschool.com.au` | `password` |
+| Instructor | `david.smith@origindrivingschool.com.au` | `password` |
+| Student | `olivia.taylor@email.com` | `password` |
+
+---
+
+## 🛡️ Security Highlights
+
+- PDO **prepared statements** for all database access (SQL injection protection)
+- Passwords hashed with `password_hash()` / verified with `password_verify()`
+- Session-based **CSRF tokens** on authentication forms
+- `HttpOnly`, cookie-only session configuration with a configurable lifetime
+- **Role-based access control** via `requireLogin()` and `requireRole()`
+- Input sanitisation to mitigate cross-site scripting (XSS)
+
+> For production: disable `display_errors` in `config/config.php`, replace the
+> demo accounts, and connect with a least-privilege database user rather than
+> `root`.

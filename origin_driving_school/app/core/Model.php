@@ -14,9 +14,14 @@ abstract class Model {
     
     /**
      * Database instance
+     *
+     * Exposed publicly so controllers/pages can run custom parameterised
+     * queries (e.g. multi-table transactions) that do not map onto the
+     * generic CRUD helpers below. Always use bound parameters when doing so.
+     *
      * @var Database
      */
-    protected $db;
+    public $db;
     
     /**
      * Table name (must be set by child class)
