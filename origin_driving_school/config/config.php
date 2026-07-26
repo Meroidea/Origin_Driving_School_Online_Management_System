@@ -17,10 +17,16 @@ defined('APP_ACCESS') or die('Direct access not permitted');
 // ========================================
 // DATABASE CONFIGURATION
 // ========================================
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'origin_driving_school');
-define('DB_USER', 'root');
-define('DB_PASS', ''); // Leave empty for XAMPP default
+// Values are read from environment variables when available (e.g. on Railway,
+// which injects MYSQLHOST/MYSQLPORT/MYSQLDATABASE/MYSQLUSER/MYSQLPASSWORD), and
+// fall back to the local XAMPP defaults for development.
+define('DB_HOST', getenv('MYSQLHOST') ?: (getenv('DB_HOST') ?: 'localhost'));
+define('DB_PORT', getenv('MYSQLPORT') ?: (getenv('DB_PORT') ?: '3306'));
+define('DB_NAME', getenv('MYSQLDATABASE') ?: (getenv('DB_NAME') ?: 'origin_driving_school'));
+define('DB_USER', getenv('MYSQLUSER') ?: (getenv('DB_USER') ?: 'root'));
+// Password may legitimately be an empty string, so test for a set value.
+define('DB_PASS', getenv('MYSQLPASSWORD') !== false ? getenv('MYSQLPASSWORD')
+    : (getenv('DB_PASS') !== false ? getenv('DB_PASS') : ''));
 define('DB_CHARSET', 'utf8mb4');
 
 // ========================================
@@ -28,7 +34,19 @@ define('DB_CHARSET', 'utf8mb4');
 // ========================================
 define('APP_NAME', 'Origin Driving School Management System');
 define('APP_VERSION', '1.0.0');
-define('APP_URL', 'http://localhost/origin_driving_school');
+
+// Base URL. On a hosted platform the app is served from the domain root, so the
+// URL is derived from the incoming request; locally it falls back to the XAMPP
+// path. An explicit APP_URL environment variable always takes precedence.
+if (getenv('APP_URL')) {
+    define('APP_URL', rtrim(getenv('APP_URL'), '/'));
+} elseif (!empty($_SERVER['HTTP_HOST'])) {
+    $__scheme = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')) ? 'https' : 'http';
+    define('APP_URL', $__scheme . '://' . $_SERVER['HTTP_HOST']);
+} else {
+    define('APP_URL', 'http://localhost/origin_driving_school');
+}
 
 // ========================================
 // PATH CONFIGURATION
@@ -100,9 +118,12 @@ define('LESSON_CANCELLATION_HOURS', 24);
 // ========================================
 // ERROR REPORTING
 // ========================================
-// Set to E_ALL during development, 0 in production
+// Errors are always logged. Displaying them in the page is enabled only when
+// APP_DEBUG=1 (safe default: off in production, on for local debugging).
+$__appDebug = getenv('APP_DEBUG') === '1' || getenv('APP_DEBUG') === 'true';
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('log_errors', '1');
+ini_set('display_errors', $__appDebug ? '1' : '0');
 
 // ========================================
 // TIMEZONE SETTING
